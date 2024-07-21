@@ -28,7 +28,7 @@ use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
  */
 class DebugDrupalFileSystem extends FileSystem implements FileSystemInterface {
 
-/**
+  /**
    * The inner service.
    *
    * @var \Drupal\Core\File\FileSystem
@@ -113,7 +113,7 @@ class DebugDrupalFileSystem extends FileSystem implements FileSystemInterface {
    */
   public function basename($uri, $suffix = NULL) {
     \Drupal::logger('DebugDrupalFileSystem')->notice('Calling ' . __METHOD__ . ': uri: ' . $uri . ' suffix: ' . $suffix);
-    return $this->decoratedService->basename($uri);
+    return $this->decoratedService->basename($uri, $suffix);
   }
    /**
    * @inheritdoc
@@ -200,7 +200,7 @@ class DebugDrupalFileSystem extends FileSystem implements FileSystemInterface {
    * @inheritdoc
    */
   public function getDestinationFilename($destination, /* FileExists */$fileExists) {
-    \Drupal::logger('DebugDrupalFileSystem')->notice('Calling ' . __METHOD__ . ': destination: ' . serialize($fileExists) . ' directory: ' . $directory);
+    \Drupal::logger('DebugDrupalFileSystem')->notice('Calling ' . __METHOD__ . ' destination: ' . $destination . ' fileExists: ' . serialize($fileExists));
     return $this->decoratedService->getDestinationFilename($destination, $fileExists);
   }
 
