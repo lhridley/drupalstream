@@ -17,15 +17,16 @@ log "Composer packages are installed"
 
 log "Running site installation."
 if [ "$clean" == "clean" ]; then
-  drush si -y minimal --account-pass=admin  --site-name="$PROJECT_NAME"
-  drush en -y admin_toolbar smtp devel stage_file_proxy dblog
-  drush theme:install -y claro
+  drush -y si minimal --account-pass=admin  --site-name="$PROJECT_NAME"
+  drush -y en admin_toolbar smtp devel stage_file_proxy dblog
+  drush -y theme:install claro
   drush cr
-  drush config:set -y system.theme default claro
-  drush theme:uninstall stark
-  drush config:export -y
+  drush -y config:set system.theme default claro
+  drush -y theme:uninstall stark
+  drush -y config:export
 else
-  drush si --existing-config -y || exit 1;
+  drush -y si --existing-config || exit 1;
+  drush -y en smtp devel stage_file_proxy dblog
 fi
 log "Site installation is finished"
 
