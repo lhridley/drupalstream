@@ -1,0 +1,39 @@
+#!/bin/bash
+## Description: Run installation sequences in the web container: composer install, build the design system, drush site:install
+## Usage: install <args>
+## Example: "ddev install"
+clean=$1
+
+source "$(dirname "$0")/common.sh"
+
+log "\e[36m--------- Running installation sequences ---------\e[39m"
+
+log "Go to the project root."
+cd "${PWD}" || exit 1;
+
+log "Installing composer dependencies (with development dependencies)."
+composer install --no-interaction --no-progress --apcu-autoloader || exit 1;
+log "Composer packages are installed"
+
+log "Running site installation."
+if [ "$clean" == "clean" ]; then
+  drush si -y minimal --account-pass=admin  --site-name="$PROJECT_NAME"
+  drush en -y admin_toolbar smtp devel stage_file_proxy dblog
+  drush theme:install -y claro
+  drush cr
+  drush config:set -y system.theme default claro
+  drush theme:uninstall stark
+  drush config:export -y
+else
+  drush si --existing-config -y || exit 1;
+fi
+log "Site installation is finished"
+
+drush uli
+
+log "\e[36m--------- Installation sequences are completed ---------\e[39m"
+
+#log "\e[36m--------- Building up Patternlab ---------\e[39m"
+#source "$(dirname "$0")/theme"
+#build_theme build;
+#log "\e[36m--------- Patternlab build complete ---------\e[39m"
