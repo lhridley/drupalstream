@@ -7,3 +7,11 @@ services:
     decorates: file_system
     decoration_priority: 1
     arguments: ['@debugstream.filesystem.inner', '@stream_wrapper_manager', '@settings']
+
+  # Decorates the Core PublicStream service
+  debugstream.publicstream:
+    class: Drupal\debugstream\Decorator\DebugDrupalPublicStream
+    public: false
+    decorates: stream_wrapper.public
+    decoration_priority: 1
+    arguments: ['@debugstream.publicstream.inner']
